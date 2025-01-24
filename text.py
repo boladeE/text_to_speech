@@ -5,9 +5,9 @@ import os
 # Initialize Amazon Polly for TTS
 polly_client = boto3.client(
     "polly",
-    aws_access_key_id="YOUR_AWS_ACCESS_KEY",
-    aws_secret_access_key="YOUR_AWS_SECRET_KEY",
-    region_name="us-east-1"  # Change this to your preferred AWS region
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_REGION", "us-east-1")
 )
 
 # Speech-to-Text function using Google Speech Recognition
@@ -40,7 +40,7 @@ def text_to_speech(text):
         response = polly_client.synthesize_speech(
             Text=text,
             OutputFormat="mp3",
-            VoiceId="Joanna"  # You can change this to other available voices
+            VoiceId="Joanna"  
         )
 
         # Save the audio file
@@ -65,7 +65,6 @@ if __name__ == "__main__":
             response = f"You said: {user_input}. How can I assist further?"
             print(f"Response: {response}")
 
-            # Convert the response to speech
             text_to_speech(response)
         else:
             print("Please try again.")
